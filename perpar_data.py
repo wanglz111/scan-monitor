@@ -1,11 +1,20 @@
 # pc端钉钉申请的token
 dingding_token = ""           # 必填
+# tg_bot_token
+tg_bot_token = "5474020930:AAGr8KZ-12MvoGYUb-MLr0FvVx6GyObYyPk"            # 必填
+
+# user_chat_id
+user_chat_id = 5437922280
+
+# group_chat_id
+group_chat_id = -1001729029482
+
 # ---- 区块浏览器申请的apikey ----
-apikey_FTM = ""               #必填
-apikey_MATIC = ""             #必填
-apikey_BSC = ""               #必填
+apikey_FTM = "94UJH4TKFNQI3USIMTS6X2J5MZJICW6AXC"               #必填
+apikey_MATIC = "NFCZK6BYTMYGN7J7DPKCJU4REA1WRN52PQ"             #必填
+apikey_BSC = "IYX4TC74ZDQURF6DY9RX612ZVYYRU1X3SZ"               #必填
 apikey_ETH = "8TJHIA2SDNWT1KC13MX2Z4F8SCY2IJNXF2"               #必填
-apikey_AVAX = ""              #必填
+apikey_AVAX = "8MN6XB1DQPP6SAMUH9CPQVU7JWCYWUJZNY"              #必填
 
 # 填写需要监控的地址
 oxdata = {

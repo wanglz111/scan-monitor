@@ -1,12 +1,14 @@
-import json,os
-from perpar_data import apikey_MATIC,apikey_FTM,apikey_ETH,apikey_BSC,apikey_AVAX
-data_path = os.getcwd()+ "/storage_data.json"
+import json, os
+from perpar_data import apikey_MATIC, apikey_FTM, apikey_ETH, apikey_BSC, apikey_AVAX
+
+data_path = os.getcwd() + "/storage_data.json"
+
 
 class FuncData:
     '''封装json读写操作'''
+
     def __init__(self):
         pass
-
 
     def _get_json_data(self):
         '''读取json文件'''
@@ -16,8 +18,7 @@ class FuncData:
             f.close()
         return tmp_json
 
-
-    def _modify_json_data(self,data):
+    def _modify_json_data(self, data):
         '''修改json文件'''
         with open(data_path, "w") as f:
             f.write(json.dumps(data))
@@ -25,7 +26,7 @@ class FuncData:
 
     ####------下面为输出函数--------####
 
-    def get_block_list(self,type):
+    def get_block_list(self, type):
         data_json = self._get_json_data()
         if type == apikey_AVAX:
             return data_json["block_list_avax"]
@@ -38,11 +39,8 @@ class FuncData:
         elif type == apikey_FTM:
             return data_json["block_list_ftm"]
 
-
-
-    def modify_block_list(self,block_number,type):
+    def modify_block_list(self, block_number, type):
         '''
-
         :param type: bsc、ftm、matic
         :return:
         '''
@@ -59,6 +57,3 @@ class FuncData:
             data_json['block_list_avax'].append(block_number)
 
         self._modify_json_data(data_json)
-
-
-
