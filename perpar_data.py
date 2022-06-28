@@ -4,11 +4,13 @@ dingding_token = ""           # 必填
 apikey_FTM = ""               #必填
 apikey_MATIC = ""             #必填
 apikey_BSC = ""               #必填
-apikey_ETH = ""               #必填
+apikey_ETH = "8TJHIA2SDNWT1KC13MX2Z4F8SCY2IJNXF2"               #必填
 apikey_AVAX = ""              #必填
 
 # 填写需要监控的地址
 oxdata = {
+    # "0xdAC17F958D2ee523a2206206994597C13D831ec7": "FTM",
+    "0x00192Fb10dF37c9FB26829eb2CC623cd1BF599E8":"mint",
     "0xD120C8B14A5D217b8063ADA404c19743f3e18A36":"模板地址",
     "0xbee558b39985eafc9c0e531de748968f38dd3421":"微博:比特肥",
     "0xb35b90e03f5d7dbd746914ee7e7eda8647cb3a14":"微博:某圈葫芦娃",
@@ -36,7 +38,7 @@ oxdata = {
     "0x442dccee68425828c106a3662014b4f131e3bd9b":"推特j1mmyeth",
     "0x6186290b28d511bff971631c916244a9fc539cfe":"推特Barthazian",
     "0x083a1457d8fc367c664b59886d651910fb9e9a70":"推特:饭团哥",
-    "0xfC12468e069fDCE70A2d2D27e9ED47eBb87e77aC":"来来BTC"
+    "0xfC12468e069fDCE70A2d2D27e9ED47eBb87e77aC":"来来BTC",
 }
 #接收方的智能合约地址，方便查阅
 contract_list = {

@@ -1,5 +1,7 @@
-import requests,json,time
+import requests,json,time, telegram, asyncio
 from perpar_data import oxdata,method_data,dingding_token,contract_list,apikey_MATIC,apikey_FTM,apikey_ETH,apikey_BSC,apikey_AVAX
+
+from loguru import logger
 
 from FuncData import FuncData
 funcdata = FuncData()
@@ -166,10 +168,40 @@ class Exercises:
         res = requests.post(api_url, json.dumps(json_text), headers=headers).content
         return res
 
+
+    def tg_warn(self,dict,tag=None):
+        '''钉钉消息推送'''
+        headers = {'Content-Type': 'application/json;charset=utf-8','User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3100.0 Safari/537.36'}
+        api_url = "https://oapi.dingtalk.com/robot/send?access_token=%s" % dingding_token
+        # eth_dingding_token = dingding_token if self.eth_dingding_token == "" else self.eth_dingding_token
+        if tag == self.apikey_FTM:
+            final_text = self.split_msg_ftm(dict)
+        elif tag == "error":
+            final_text = dict
+        elif tag == self.apikey_MATIC:
+            final_text = self.split_msg_matic(dict)
+        elif tag == self.apikey_ETH:
+            # api_url = "https://oapi.dingtalk.com/robot/send?access_token=%s" % eth_dingding_token
+            final_text = self.split_msg_eth(dict)
+        elif tag == self.apikey_BSC:
+            final_text = self.split_msg(dict)
+        elif tag == self.apikey_AVAX:
+            final_text = self.split_msg_avax(dict)
+
+        # res = requests.post(api_url, json.dumps(json_text), headers=headers).content
+        # return res
+
+        asyncio.run(self.send_message(final_text))
+
     def stampTransformTime(self,timestamp):
         '''10位时间戳转为时间'''
         time_local = time.localtime(timestamp)
         return time.strftime("%Y-%m-%d %H:%M:%S", time_local)
+
+    async def send_message(self, final_text):
+        bot = telegram.Bot(token="5474020930:AAGr8KZ-12MvoGYUb-MLr0FvVx6GyObYyPk")
+        async with bot:
+            await bot.send_message(text=final_text, chat_id=5437922280)
 
 
 
@@ -208,13 +240,15 @@ class Exercises:
         except Exception as e:
             if str(e).find("443") != -1:  # 网络错误不用报错
                 return 443
-            
+
     # ---- API接口封装  ------
 
     def get_recent_tx(self,address,rotate_count=0):
         '''获取最新交易信息'''
-        apikey_list = [self.apikey_ETH,self.apikey_BSC,self.apikey_FTM,self.apikey_MATIC,self.apikey_AVAX]
+        # apikey_list = [self.apikey_ETH,self.apikey_BSC,self.apikey_FTM,self.apikey_MATIC,self.apikey_AVAX]
+        apikey_list = [self.apikey_ETH]
         for item in apikey_list:
+            # logger.info("get_recent_tx: %s" % item)
             res = self._get_txlist_api(2, address,item)
             if res == 443 and rotate_count < 10:  # 网络问题并且20次都访问都是443则报错停止运行
                 rotate_count += 1
@@ -224,10 +258,12 @@ class Exercises:
             elif 'status' in res and res['status'] == '1' and len(res['result']) > 1:
 
                 first_mes = res['result'][0]
+                # logger.info(first_mes)
                 second_mes = res['result'][1]
                 if first_mes['blockNumber'] not in funcdata.get_block_list(item) and time.time() - float(first_mes['timeStamp'])  < 3600 and float(first_mes['timeStamp']) - float(second_mes['timeStamp']) > 300:
+                # if first_mes['blockNumber'] not in funcdata.get_block_list(item) and time.time() - float(first_mes['timeStamp'])  < 3600:
                     method = first_mes['input'][0:10]
-                    self.dingding_warn({"time":first_mes['timeStamp'],"hash":first_mes['hash'],"value":first_mes['value'],"from":first_mes['from'],"to":first_mes['to'],'method':method},item)
+                    self.tg_warn({"time":first_mes['timeStamp'],"hash":first_mes['hash'],"value":first_mes['value'],"from":first_mes['from'],"to":first_mes['to'],'method':method},item)
                     funcdata.modify_block_list(str(first_mes['blockNumber']),item)
 
 
@@ -235,6 +271,8 @@ if __name__ == "__main__":
     ins = Exercises()
     while(True):
         for key in oxdata:
+            # asyncio.run(ins.send_message(key))
+            logger.info(key)
             ins.get_recent_tx(key)
             time.sleep(1)
 
