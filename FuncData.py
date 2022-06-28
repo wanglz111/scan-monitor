@@ -1,7 +1,8 @@
 import json, os
 from perpar_data import apikey_MATIC, apikey_FTM, apikey_ETH, apikey_BSC, apikey_AVAX
 
-data_path = os.getcwd() + "/storage_data.json"
+# data_path = os.getcwd() + "/storage_data.json"
+data_path = "./storage_data.json"
 
 
 class FuncData:
