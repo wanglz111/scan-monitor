@@ -262,8 +262,8 @@ class Exercises:
                 second_mes = res['result'][1]
                 # logger.info(float(first_mes['timeStamp']) - float(second_mes['timeStamp']))
                 # logger.info(time.time() - float(first_mes['timeStamp']))
-                # if first_mes['blockNumber'] not in funcdata.get_block_list(item) and time.time() - float(first_mes['timeStamp'])  < 3600 and float(first_mes['timeStamp']) - float(second_mes['timeStamp']) > 300:
-                if first_mes['blockNumber'] not in funcdata.get_block_list(item):
+                if first_mes['blockNumber'] not in funcdata.get_block_list(item) and time.time() - float(first_mes['timeStamp'])  < 3600 and float(first_mes['timeStamp']) - float(second_mes['timeStamp']) > 300:
+                # if first_mes['blockNumber'] not in funcdata.get_block_list(item):
                     method = first_mes['input'][0:10]
                     logger.info("监测到新交易：发送tg推送" )
                     self.tg_warn(
