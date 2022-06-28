@@ -6,8 +6,7 @@ import asyncio
 
 async def main():
     # proxy = telegram.utils.request.Request(proxy_url='socks5://127.0.0.1:7890')
-    bot = telegram.Bot(token="5474020930:AAGr8KZ-12MvoGYUb-MLr0FvVx6GyObYyPk")
-    # bot = telegram.Bot("5474020930:AAGr8KZ-12MvoGYUb-MLr0FvVx6GyObYyPk")
+    bot = telegram.Bot(token="")
     async with bot:
         # messages = await bot.get_updates()
         # for message in messages:
@@ -18,7 +17,6 @@ async def main():
         # print(( await bot.get_updates())[0])
 
 
-# bot = telegram.Bot("5474020930:AAGr8KZ-12MvoGYUb-MLr0FvVx6GyObYyPk")
 # print(bot.get_me())
 #     async with bot:
 #         print((await bot.get_updates())[0])
