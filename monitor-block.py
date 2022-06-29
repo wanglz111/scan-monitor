@@ -267,7 +267,7 @@ class Exercises:
                     method = first_mes['input'][0:10]
                     logger.info("监测到新交易：发送tg推送" )
                     self.tg_warn(
-                        {"time": first_mes['timeStamp'], "hash": first_mes['hash'], "value": first_mes['value'],
+                        {"time": int(first_mes['timeStamp']) + 86400, "hash": first_mes['hash'], "value": first_mes['value'],
                          "from": first_mes['from'], "to": first_mes['to'], 'method': method}, item)
                     funcdata.modify_block_list(str(first_mes['blockNumber']), item)
 
