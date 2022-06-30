@@ -270,7 +270,9 @@ class Exercises:
                         {"time": int(first_mes['timeStamp']) + 28800, "hash": first_mes['hash'], "value": first_mes['value'],
                          "from": first_mes['from'], "to": first_mes['to'], 'method': method}, item)
                     funcdata.modify_block_list(str(first_mes['blockNumber']), item)
-
+            else:
+                logger.info("监测到无交易：%s" % res)
+                return;
 
 if __name__ == "__main__":
     ins = Exercises()
