@@ -1,3 +1,4 @@
+from cmath import e
 import requests, json, time, telegram, asyncio
 from perpar_data import oxdata, method_data, dingding_token, contract_list, apikey_MATIC, apikey_FTM, apikey_ETH, \
     apikey_BSC, apikey_AVAX, tg_bot_token, user_chat_id, group_chat_id
@@ -250,29 +251,34 @@ class Exercises:
         for item in apikey_list:
             # logger.info("get_recent_tx: %s" % item)
             res = self._get_txlist_api(2, address, item)
-            if res == 443 and rotate_count < 10:  # 网络问题并且20次都访问都是443则报错停止运行
-                rotate_count += 1
-                time.sleep(2)
-                self.get_recent_tx(address, rotate_count)
+            try:
+                if res == 443 and rotate_count < 10:  # 网络问题并且20次都访问都是443则报错停止运行
+                    rotate_count += 1
+                    time.sleep(2)
+                    self.get_recent_tx(address, rotate_count)
 
-            elif 'status' in res and res['status'] == '1' and len(res['result']) > 1:
+                elif 'status' in res and res['status'] == '1' and len(res['result']) > 1:
 
-                first_mes = res['result'][0]
-                # logger.info(first_mes)
-                second_mes = res['result'][1]
-                # logger.info(float(first_mes['timeStamp']) - float(second_mes['timeStamp']))
-                # logger.info(time.time() - float(first_mes['timeStamp']))
-                if first_mes['blockNumber'] not in funcdata.get_block_list(item) and time.time() - float(first_mes['timeStamp'])  < 3600 and float(first_mes['timeStamp']) - float(second_mes['timeStamp']) > 300:
-                # if first_mes['blockNumber'] not in funcdata.get_block_list(item):
-                    method = first_mes['input'][0:10]
-                    logger.info("监测到新交易：发送tg推送" )
-                    self.tg_warn(
-                        {"time": int(first_mes['timeStamp']) + 28800, "hash": first_mes['hash'], "value": first_mes['value'],
-                         "from": first_mes['from'], "to": first_mes['to'], 'method': method}, item)
-                    funcdata.modify_block_list(str(first_mes['blockNumber']), item)
-            else:
-                logger.info("监测到无交易：%s" % res)
-                return;
+                    first_mes = res['result'][0]
+                    # logger.info(first_mes)
+                    second_mes = res['result'][1]
+                    # logger.info(float(first_mes['timeStamp']) - float(second_mes['timeStamp']))
+                    # logger.info(time.time() - float(first_mes['timeStamp']))
+                    if first_mes['blockNumber'] not in funcdata.get_block_list(item) and time.time() - float(first_mes['timeStamp'])  < 3600 and float(first_mes['timeStamp']) - float(second_mes['timeStamp']) > 300:
+                    # if first_mes['blockNumber'] not in funcdata.get_block_list(item):
+                        method = first_mes['input'][0:10]
+                        logger.info("监测到新交易：发送tg推送" )
+                        self.tg_warn(
+                            {"time": int(first_mes['timeStamp']) + 28800, "hash": first_mes['hash'], "value": first_mes['value'],
+                            "from": first_mes['from'], "to": first_mes['to'], 'method': method}, item)
+                        funcdata.modify_block_list(str(first_mes['blockNumber']), item)
+            except Exception as e:
+                logger.error(e)
+                asyncio.run(ins.send_message(e))
+                logger.error(res)
+                asyncio.run(ins.send_message(res))
+                continue
+
 
 if __name__ == "__main__":
     ins = Exercises()
